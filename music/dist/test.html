@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <script src="http://localhost:8080/magentamusic.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/file-saver'></script>
+    <script>
+        // Instantiate the model by loading the desired checkpoint.
+        const model = new mm.MusicVAE(
+            './mel_2bar_small');
+        const player = new mm.Player();
+        let trio;
+
+        function generate() {
+          mm.Player.tone.context.resume();  // enable audio
+          model.sample(1).then((samples) => {
+              trio = samples[0];
+              player.start(trio);
+          });
+        }
+
+      </script>
+    </head>
+    <body>
+      <button onclick="generate()"><h1>Generate Trio</h1></button>
+      <button onclick="saveAs(new File([mm.sequenceProtoToMidi(trio)], 'trio.mid'))"><h1>Download Trio</h1></button>
+    </body>
+  </html>
